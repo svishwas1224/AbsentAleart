@@ -129,13 +129,30 @@ export default function StudentDashboard() {
                 <div className="stat-sub">all time</div>
               </div>
             </div>
+
+            {/* Mentor info banner */}
+            {mentor && (
+              <div style={{ display:'flex', alignItems:'center', gap:'1rem', padding:'1rem 1.25rem', background:'var(--teal-dim)', border:'1px solid var(--teal)', borderRadius:14, marginBottom:'1.5rem' }}>
+                <div className="avatar-lg avatar-faculty" style={{ width:44, height:44, fontSize:'.9rem', flexShrink:0 }}>
+                  {mentor.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)}
+                </div>
+                <div style={{ flex:1 }}>
+                  <p style={{ fontSize:'.72rem', color:'var(--teal)', fontWeight:700, textTransform:'uppercase', letterSpacing:'.6px' }}>Your Class Mentor</p>
+                  <p style={{ fontWeight:600, color:'var(--text-1)', fontSize:'.95rem', marginTop:'.1rem' }}>{mentor.name}</p>
+                  <p style={{ color:'var(--text-3)', fontSize:'.75rem' }}>{mentor.department} · {mentor.email}</p>
+                </div>
+                <div style={{ fontSize:'.72rem', color:'var(--teal)', background:'var(--surface)', border:'1px solid var(--teal)', borderRadius:8, padding:'.35rem .75rem', whiteSpace:'nowrap' }}>
+                  Leave requests go to this mentor
+                </div>
+              </div>
+            )}
+
             <div className="grid-2-1">
               <div className="card">
                 <div className="card-header">
                   <div className="card-title"><div className="card-icon">—</div>Recent Applications</div>
                   <button className="btn btn-ghost btn-sm" onClick={() => setPage('history')}>View All</button>
-                </div>
-                <div className="table-wrap">
+                </div>                <div className="table-wrap">
                   <table><thead><tr><th>Type</th><th>Dates</th><th>Days</th><th>Status</th></tr></thead>
                   <tbody>
                     {leaves.slice(-5).reverse().map(l => (
