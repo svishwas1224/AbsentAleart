@@ -80,7 +80,8 @@ class LecturerAssignment(db.Model):
     id               = db.Column(db.Integer, primary_key=True)
     lecturer_id      = db.Column(db.Integer, db.ForeignKey('lecturers.id'), nullable=False)
     class_id         = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
-    subject_id       = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)
+    subject_id       = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=True)
+    is_mentor        = db.Column(db.Boolean, default=False)   # class in-charge / mentor
     department       = db.Column(db.String(100))
     assigned_by_admin= db.Column(db.Integer, db.ForeignKey('management.id'))
     created_at       = db.Column(db.DateTime, default=datetime.utcnow)
@@ -97,7 +98,8 @@ class LecturerAssignment(db.Model):
             class_id=self.class_id,
             class_name=self.cls.class_name if self.cls else '',
             subject_id=self.subject_id,
-            subject_name=self.subject.subject_name if self.subject else '',
+            subject_name=self.subject.subject_name if self.subject else '—',
+            is_mentor=self.is_mentor,
             department=self.department,
         )
 

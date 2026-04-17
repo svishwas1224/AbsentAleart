@@ -21,10 +21,17 @@ def apply_leave():
 
     if role == 'student':
         student = Student.query.get(uid)
-        assignments = LecturerAssignment.query.join(Class).filter(
-            Class.class_name == student.class_name
-        ).all()
-        initial_status = 'Pending with Lecturer' if assignments else 'Pending with Management'
+        # Find the class mentor (is_mentor=True) for this student's class
+        mentor_assignment = LecturerAssignment.query.join(Class).filter(
+            Class.class_name == student.class_name,
+            LecturerAssignment.is_mentor == True
+        ).first()
+        # Fallback: any lecturer assigned to this class
+        if not mentor_assignment:
+            mentor_assignment = LecturerAssignment.query.join(Class).filter(
+                Class.class_name == student.class_name
+            ).first()
+        initial_status = 'Pending with Lecturer' if mentor_assignment else 'Pending with Management'
 
         leave = Leave(
             applicant_id=uid, applicant_role='student',
@@ -38,9 +45,9 @@ def apply_leave():
         db.session.add(leave)
         db.session.commit()
 
-        # Email all assigned lecturers
-        for a in assignments:
-            lec = Lecturer.query.get(a.lecturer_id)
+        # Email the class mentor only
+        if mentor_assignment:
+            lec = Lecturer.query.get(mentor_assignment.lecturer_id)
             if lec:
                 notify_leave_submitted(
                     current_app._get_current_object(),

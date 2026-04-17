@@ -65,21 +65,21 @@ def assign_lecturer():
     err = require_management()
     if err: return err
     d = request.get_json()
-    required = ['lecturer_id', 'class_id', 'subject_id']
-    for f in required:
-        if not d.get(f):
-            return jsonify({'error': f'{f} required'}), 400
+    if not d.get('lecturer_id') or not d.get('class_id'):
+        return jsonify({'error': 'lecturer_id and class_id required'}), 400
 
-    # Prevent duplicate assignment
-    existing = LecturerAssignment.query.filter_by(
-        lecturer_id=d['lecturer_id'], class_id=d['class_id'], subject_id=d['subject_id']
-    ).first()
-    if existing:
-        return jsonify({'error': 'Assignment already exists'}), 409
+    # If setting as mentor, clear existing mentor for this class first
+    if d.get('is_mentor'):
+        LecturerAssignment.query.filter_by(
+            class_id=d['class_id'], is_mentor=True
+        ).update({'is_mentor': False})
 
     a = LecturerAssignment(
-        lecturer_id=d['lecturer_id'], class_id=d['class_id'],
-        subject_id=d['subject_id'], department=d.get('department',''),
+        lecturer_id=d['lecturer_id'],
+        class_id=d['class_id'],
+        subject_id=d.get('subject_id') or None,
+        is_mentor=bool(d.get('is_mentor', False)),
+        department=d.get('department', ''),
         assigned_by_admin=session.get('user_id')
     )
     db.session.add(a); db.session.commit()

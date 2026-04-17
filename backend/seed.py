@@ -88,24 +88,24 @@ def seed_db():
     db.session.add_all(students)
     db.session.flush()
 
-    # ── Lecturer Assignments ──────────────────────────────────
+    # ── Lecturer Assignments (one mentor per class) ──────────
     assignments = [
-        # BCA-3A
-        LecturerAssignment(lecturer_id=lecturers[0].id, class_id=classes[2].id, subject_id=subjects[2].id, department='Computer Science',       assigned_by_admin=admin.id),
-        LecturerAssignment(lecturer_id=lecturers[1].id, class_id=classes[2].id, subject_id=subjects[3].id, department='Computer Science',       assigned_by_admin=admin.id),
-        # BCA-2A
-        LecturerAssignment(lecturer_id=lecturers[0].id, class_id=classes[1].id, subject_id=subjects[1].id, department='Computer Science',       assigned_by_admin=admin.id),
-        LecturerAssignment(lecturer_id=lecturers[1].id, class_id=classes[1].id, subject_id=subjects[0].id, department='Computer Science',       assigned_by_admin=admin.id),
-        # BBA-3A
-        LecturerAssignment(lecturer_id=lecturers[2].id, class_id=classes[5].id, subject_id=subjects[6].id, department='Business Administration', assigned_by_admin=admin.id),
-        LecturerAssignment(lecturer_id=lecturers[3].id, class_id=classes[5].id, subject_id=subjects[7].id, department='Business Administration', assigned_by_admin=admin.id),
-        # BBA-2A
-        LecturerAssignment(lecturer_id=lecturers[2].id, class_id=classes[4].id, subject_id=subjects[4].id, department='Business Administration', assigned_by_admin=admin.id),
-        # BCom-3A
-        LecturerAssignment(lecturer_id=lecturers[4].id, class_id=classes[8].id, subject_id=subjects[10].id, department='Commerce',              assigned_by_admin=admin.id),
-        LecturerAssignment(lecturer_id=lecturers[5].id, class_id=classes[8].id, subject_id=subjects[11].id, department='Commerce',              assigned_by_admin=admin.id),
-        # BCom-2A
-        LecturerAssignment(lecturer_id=lecturers[4].id, class_id=classes[7].id, subject_id=subjects[8].id,  department='Commerce',              assigned_by_admin=admin.id),
+        # BCA-3A — Dr. Priya Nair is mentor
+        LecturerAssignment(lecturer_id=lecturers[0].id, class_id=classes[2].id, subject_id=subjects[2].id, is_mentor=True,  department='Computer Science',       assigned_by_admin=admin.id),
+        LecturerAssignment(lecturer_id=lecturers[1].id, class_id=classes[2].id, subject_id=subjects[3].id, is_mentor=False, department='Computer Science',       assigned_by_admin=admin.id),
+        # BCA-2A — Dr. Priya Nair is mentor
+        LecturerAssignment(lecturer_id=lecturers[0].id, class_id=classes[1].id, subject_id=subjects[1].id, is_mentor=True,  department='Computer Science',       assigned_by_admin=admin.id),
+        LecturerAssignment(lecturer_id=lecturers[1].id, class_id=classes[1].id, subject_id=subjects[0].id, is_mentor=False, department='Computer Science',       assigned_by_admin=admin.id),
+        # BBA-3A — Dr. Sunita Rao is mentor
+        LecturerAssignment(lecturer_id=lecturers[2].id, class_id=classes[5].id, subject_id=subjects[6].id, is_mentor=True,  department='Business Administration', assigned_by_admin=admin.id),
+        LecturerAssignment(lecturer_id=lecturers[3].id, class_id=classes[5].id, subject_id=subjects[7].id, is_mentor=False, department='Business Administration', assigned_by_admin=admin.id),
+        # BBA-2A — Dr. Sunita Rao is mentor
+        LecturerAssignment(lecturer_id=lecturers[2].id, class_id=classes[4].id, subject_id=subjects[4].id, is_mentor=True,  department='Business Administration', assigned_by_admin=admin.id),
+        # BCom-3A — Dr. Kavitha Reddy is mentor
+        LecturerAssignment(lecturer_id=lecturers[4].id, class_id=classes[8].id, subject_id=subjects[10].id, is_mentor=True,  department='Commerce',              assigned_by_admin=admin.id),
+        LecturerAssignment(lecturer_id=lecturers[5].id, class_id=classes[8].id, subject_id=subjects[11].id, is_mentor=False, department='Commerce',              assigned_by_admin=admin.id),
+        # BCom-2A — Dr. Kavitha Reddy is mentor
+        LecturerAssignment(lecturer_id=lecturers[4].id, class_id=classes[7].id, subject_id=subjects[8].id,  is_mentor=True,  department='Commerce',              assigned_by_admin=admin.id),
     ]
     db.session.add_all(assignments)
 
