@@ -37,12 +37,10 @@ def create_app():
     with app.app_context():
         import os
         db_path = os.path.join(app.instance_path, 'absentalert.db')
-        if not os.path.exists(db_path):
-            db.create_all()
+        db.create_all()
+        if not os.path.exists(db_path) or os.path.getsize(db_path) < 1000:
             from seed import seed_db
             seed_db()
-        else:
-            db.create_all()
 
     return app
 

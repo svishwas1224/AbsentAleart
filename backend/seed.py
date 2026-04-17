@@ -3,8 +3,16 @@ from extensions import db
 from werkzeug.security import generate_password_hash
 
 def seed_db():
-    if Management.query.count() > 0:
-        return
+    # Clear all existing data first
+    from sqlalchemy import text
+    db.session.execute(text('DELETE FROM leaves'))
+    db.session.execute(text('DELETE FROM lecturer_assignments'))
+    db.session.execute(text('DELETE FROM students'))
+    db.session.execute(text('DELETE FROM lecturers'))
+    db.session.execute(text('DELETE FROM subjects'))
+    db.session.execute(text('DELETE FROM classes'))
+    db.session.execute(text('DELETE FROM management'))
+    db.session.commit()
 
     # ── Management ────────────────────────────────────────────
     admin = Management(email='admin@demo.com', password=generate_password_hash('admin123'))
