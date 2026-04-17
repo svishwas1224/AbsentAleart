@@ -25,6 +25,7 @@ export const api = {
   // Leaves
   applyLeave:        (d)   => req('POST', '/leaves/apply', d),
   myLeaves:          ()    => req('GET',  '/leaves/my'),
+  myMentor:          ()    => req('GET',  '/leaves/my-mentor'),
   studentRequests:   ()    => req('GET',  '/leaves/student-requests'),
   lecturerRequests:  ()    => req('GET',  '/leaves/lecturer-requests'),
   forwardedLeaves:   ()    => req('GET',  '/leaves/forwarded'),

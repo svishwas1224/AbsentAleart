@@ -73,9 +73,8 @@ export default function Login() {
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
   const activeColor = ROLES.find(r => r.key === role)?.color || 'var(--teal)'
 
-  // Filter classes by selected department
+  // Filter classes by selected department only
   const filteredClasses = classes.filter(c => c.department === form.department)
-  const selectedClass = classes.find(c => c.class_name === form.class_name)
 
   const handleSubmit = async () => {
     setError(''); setSuccess(''); setLoading(true)
@@ -238,12 +237,10 @@ export default function Login() {
                   <select className="form-control" value={form.class_name || ''} onChange={e => set('class_name', e.target.value)}>
                     <option value="">Select class</option>
                     {filteredClasses.map(c => (
-                      <option key={c.id} value={c.class_name}>
-                        {c.class_name} — Mentor: {c.mentor_name}
-                      </option>
+                      <option key={c.id} value={c.class_name}>{c.class_name}</option>
                     ))}
                     {!filteredClasses.length && form.department && (
-                      <option disabled>No classes for this department yet</option>
+                      <option disabled>No classes found for this department</option>
                     )}
                   </select>
                 </div>
@@ -252,11 +249,6 @@ export default function Login() {
                 <label className="form-label">Password <span style={{color:'var(--rejected)'}}>*</span></label>
                 <PasswordInput value={form.password || ''} onChange={e => set('password', e.target.value)} placeholder="Create a password" />
               </div>
-              {selectedClass && selectedClass.mentor_name !== 'Not assigned' && (
-                <div style={{ fontSize:'.82rem', color:'#065f46', padding:'.65rem .875rem', background:'#d1fae5', border:'1px solid #10b981', borderRadius:8, marginBottom:'.5rem', lineHeight:1.5 }}>
-                  Your class mentor is <strong>{selectedClass.mentor_name}</strong>. Leave requests will be sent to them.
-                </div>
-              )}
             </>
           )}
 

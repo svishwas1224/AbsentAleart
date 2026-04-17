@@ -28,14 +28,17 @@ def seed_db():
     ]
     db.session.add_all(classes)
 
-    # ── Lecturers ─────────────────────────────────────────────
+    # ── Lecturers (9 — one mentor per class) ─────────────────
     lecturers = [
-        Lecturer(lecturer_name='Dr. Priya Nair',    email='priya@demo.com',   password=generate_password_hash('1234'), lecturer_id='FAC001', department='Computer Science'),
-        Lecturer(lecturer_name='Prof. Rajan Kumar', email='rajan@demo.com',   password=generate_password_hash('1234'), lecturer_id='FAC002', department='Computer Science'),
-        Lecturer(lecturer_name='Dr. Sunita Rao',    email='sunita@demo.com',  password=generate_password_hash('1234'), lecturer_id='FAC003', department='Business Administration'),
-        Lecturer(lecturer_name='Prof. Anil Mehta',  email='anil@demo.com',    password=generate_password_hash('1234'), lecturer_id='FAC004', department='Business Administration'),
-        Lecturer(lecturer_name='Dr. Kavitha Reddy', email='kavitha@demo.com', password=generate_password_hash('1234'), lecturer_id='FAC005', department='Commerce'),
-        Lecturer(lecturer_name='Prof. Suresh Babu', email='suresh@demo.com',  password=generate_password_hash('1234'), lecturer_id='FAC006', department='Commerce'),
+        Lecturer(lecturer_name='Dr. Priya Nair',     email='priya@demo.com',   password=generate_password_hash('1234'), lecturer_id='FAC001', department='Computer Science'),
+        Lecturer(lecturer_name='Prof. Rajan Kumar',  email='rajan@demo.com',   password=generate_password_hash('1234'), lecturer_id='FAC002', department='Computer Science'),
+        Lecturer(lecturer_name='Prof. Deepak Sharma',email='deepak@demo.com',  password=generate_password_hash('1234'), lecturer_id='FAC003', department='Computer Science'),
+        Lecturer(lecturer_name='Dr. Sunita Rao',     email='sunita@demo.com',  password=generate_password_hash('1234'), lecturer_id='FAC004', department='Business Administration'),
+        Lecturer(lecturer_name='Prof. Anil Mehta',   email='anil@demo.com',    password=generate_password_hash('1234'), lecturer_id='FAC005', department='Business Administration'),
+        Lecturer(lecturer_name='Dr. Rekha Pillai',   email='rekha@demo.com',   password=generate_password_hash('1234'), lecturer_id='FAC006', department='Business Administration'),
+        Lecturer(lecturer_name='Dr. Kavitha Reddy',  email='kavitha@demo.com', password=generate_password_hash('1234'), lecturer_id='FAC007', department='Commerce'),
+        Lecturer(lecturer_name='Prof. Suresh Babu',  email='suresh@demo.com',  password=generate_password_hash('1234'), lecturer_id='FAC008', department='Commerce'),
+        Lecturer(lecturer_name='Prof. Mohan Das',    email='mohan@demo.com',   password=generate_password_hash('1234'), lecturer_id='FAC009', department='Commerce'),
     ]
     db.session.add_all(lecturers)
     db.session.flush()

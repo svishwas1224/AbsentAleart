@@ -322,3 +322,24 @@ def forward(lid):
     leave.updated_at   = datetime.utcnow()
     db.session.commit()
     return jsonify(leave.to_dict()), 200
+
+# ── Student's class mentor info ───────────────────────────────
+@leaves_bp.route('/my-mentor', methods=['GET'])
+def my_mentor():
+    uid, role = current_user()
+    if role != 'student':
+        return jsonify({'error': 'Students only'}), 403
+    student = Student.query.get(uid)
+    if not student or not student.class_name:
+        return jsonify({'mentor': None}), 200
+    assignment = LecturerAssignment.query.join(Class).filter(
+        Class.class_name == student.class_name,
+        LecturerAssignment.is_mentor == True
+    ).first()
+    if assignment and assignment.lecturer:
+        return jsonify({'mentor': {
+            'name': assignment.lecturer.lecturer_name,
+            'email': assignment.lecturer.email,
+            'department': assignment.lecturer.department,
+        }}), 200
+    return jsonify({'mentor': None}), 200

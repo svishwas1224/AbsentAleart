@@ -14,6 +14,7 @@ export default function StudentDashboard() {
   const [page, setPage]       = useState('dashboard')
   const [leaves, setLeaves]   = useState([])
   const [notifs, setNotifs]   = useState([])
+  const [mentor, setMentor]   = useState(null)
   const [calDate, setCalDate] = useState(new Date())
 
   // Form state
@@ -26,8 +27,9 @@ export default function StudentDashboard() {
   const [filterType, setFilterType]     = useState('all')
 
   const load = useCallback(async () => {
-    const l = await api.myLeaves()
+    const [l, m] = await Promise.all([api.myLeaves(), api.myMentor()])
     setLeaves(l)
+    setMentor(m.mentor)
   }, [])
 
   useEffect(() => { load() }, [load])
@@ -321,11 +323,34 @@ export default function StudentDashboard() {
               <div className="profile-grid">
                 <div className="profile-field"><label>Roll Number</label><p>{user?.roll_no}</p></div>
                 <div className="profile-field"><label>Department</label><p>{user?.department}</p></div>
-                <div className="profile-field"><label>Class</label><p>{user?.class_name}</p></div>
+                <div className="profile-field"><label>Class</label><p>{user?.class_name || '—'}</p></div>
                 <div className="profile-field"><label>Semester</label><p>{user?.semester || '—'}</p></div>
                 <div className="profile-field"><label>Email</label><p>{user?.email}</p></div>
                 <div className="profile-field"><label>Leave Quota</label><p>{QUOTA} days / semester</p></div>
               </div>
+              {mentor && (
+                <div style={{ marginTop:'1.5rem', paddingTop:'1.5rem', borderTop:'1px solid var(--border)' }}>
+                  <div className="card-title" style={{ marginBottom:'1rem' }}>Class Mentor</div>
+                  <div style={{ display:'flex', alignItems:'center', gap:'1rem', padding:'1rem', background:'var(--teal-dim)', border:'1px solid var(--teal)', borderRadius:12 }}>
+                    <div className="avatar-lg avatar-faculty" style={{ width:48, height:48, fontSize:'1rem' }}>
+                      {mentor.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)}
+                    </div>
+                    <div>
+                      <p style={{ fontWeight:600, color:'var(--text-1)', fontSize:'.95rem' }}>{mentor.name}</p>
+                      <p style={{ color:'var(--text-3)', fontSize:'.78rem', marginTop:'.2rem' }}>{mentor.department}</p>
+                      <p style={{ color:'var(--teal)', fontSize:'.78rem', marginTop:'.1rem' }}>{mentor.email}</p>
+                    </div>
+                  </div>
+                  <p style={{ fontSize:'.75rem', color:'var(--text-3)', marginTop:'.6rem' }}>
+                    Your leave requests are sent to this mentor for approval.
+                  </p>
+                </div>
+              )}
+              {!mentor && user?.class_name && (
+                <div style={{ marginTop:'1.5rem', paddingTop:'1.5rem', borderTop:'1px solid var(--border)', fontSize:'.82rem', color:'var(--text-3)' }}>
+                  No mentor assigned to your class yet. Contact management.
+                </div>
+              )}
 
             </div>
           </div>
