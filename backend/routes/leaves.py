@@ -17,7 +17,20 @@ def apply_leave():
     if not uid:
         return jsonify({'error': 'Not authenticated'}), 401
 
-    d = request.get_json()
+    d = request.get_json() or {}
+
+    # Validate required fields
+    leave_type = d.get('leave_type', '').strip()
+    reason     = d.get('reason', '').strip()
+    from_date  = d.get('from_date', '').strip()
+    to_date    = d.get('to_date', '').strip()
+
+    if not leave_type:
+        return jsonify({'error': 'leave_type is required'}), 400
+    if not reason:
+        return jsonify({'error': 'reason is required'}), 400
+    if not from_date or not to_date:
+        return jsonify({'error': 'from_date and to_date are required'}), 400
 
     if role == 'student':
         student = Student.query.get(uid)
@@ -38,8 +51,8 @@ def apply_leave():
             applicant_name=student.student_name or student.roll_no,
             email=student.email, department=student.department,
             class_name=student.class_name,
-            leave_type=d['leave_type'], reason=d['reason'],
-            from_date=d['from_date'], to_date=d['to_date'],
+            leave_type=leave_type, reason=reason,
+            from_date=from_date, to_date=to_date,
             days=d.get('days', 1), status=initial_status
         )
         db.session.add(leave)
@@ -52,10 +65,10 @@ def apply_leave():
                 notify_leave_submitted(
                     current_app._get_current_object(),
                     student_name=student.student_name or student.roll_no,
-                    leave_type=d['leave_type'],
-                    from_date=d['from_date'],
-                    to_date=d['to_date'],
-                    reason=d['reason'],
+                    leave_type=leave_type,
+                    from_date=from_date,
+                    to_date=to_date,
+                    reason=reason,
                     lecturer_email=lec.email,
                     lecturer_name=lec.lecturer_name,
                 )
@@ -66,8 +79,8 @@ def apply_leave():
             applicant_id=uid, applicant_role='lecturer',
             applicant_name=lec.lecturer_name, email=lec.email,
             department=lec.department, class_name='',
-            leave_type=d['leave_type'], reason=d['reason'],
-            from_date=d['from_date'], to_date=d['to_date'],
+            leave_type=leave_type, reason=reason,
+            from_date=from_date, to_date=to_date,
             days=d.get('days', 1), status='Pending with Management'
         )
         db.session.add(leave)
