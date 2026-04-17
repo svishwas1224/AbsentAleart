@@ -45,7 +45,7 @@ export default function StudentDashboard() {
     if (new Date(toDate) < new Date(fromDate)) { showToast('Invalid Dates', 'End date cannot be before start date.', 'error'); return }
     if (used + days > QUOTA) { showToast('Quota Exceeded', `Only ${QUOTA - used} days remaining.`, 'error'); return }
     try {
-      await api.applyLeave({ type: leaveType, from: fromDate, to: toDate, days, reason: reason.trim() })
+      await api.applyLeave({ leave_type: leaveType, from_date: fromDate, to_date: toDate, days, reason: reason.trim() })
       setLeaveType(''); setReason(''); setFromDate(today); setToDate(today)
       await load()
       showToast('Submitted ', 'Your leave application has been sent to your faculty.', 'success')
@@ -60,9 +60,9 @@ export default function StudentDashboard() {
 
   // Calendar
   const leaveDays = new Set()
-  leaves.filter(l => l.status !== 'Rejected').forEach(l => {
-    let d = new Date(l.from + 'T00:00:00')
-    const end = new Date(l.to + 'T00:00:00')
+  leaves.filter(l => !l.status.includes('Rejected')).forEach(l => {
+    let d = new Date(l.from_date + 'T00:00:00')
+    const end = new Date(l.to_date + 'T00:00:00')
     while (d <= end) {
       if (d.getMonth() === calDate.getMonth() && d.getFullYear() === calDate.getFullYear())
         leaveDays.add(d.getDate())
@@ -75,7 +75,7 @@ export default function StudentDashboard() {
 
   const filteredLeaves = [...leaves].reverse().filter(l =>
     (filterStatus === 'all' || l.status === filterStatus) &&
-    (filterType   === 'all' || l.type   === filterType)
+    (filterType   === 'all' || l.leave_type === filterType)
   )
 
   const notifDot = t => t === 'approved' ? 'dot-teal' : t === 'rejected' ? 'dot-red' : 'dot-yellow'
@@ -138,10 +138,10 @@ export default function StudentDashboard() {
                   <tbody>
                     {leaves.slice(-5).reverse().map(l => (
                       <tr key={l.id}>
-                        <td style={{ textTransform:'capitalize' }}>{l.type}</td>
-                        <td>{l.from}{l.from !== l.to ? ' -> ' + l.to : ''}</td>
+                        <td style={{ textTransform:'capitalize' }}>{l.leave_type}</td>
+                        <td>{l.from_date}{l.from_date !== l.to_date ? ' to ' + l.to_date : ''}</td>
                         <td>{l.days}d</td>
-                        <td><span className={`badge badge-${l.status.toLowerCase()}`}>{l.status}</span></td>
+                        <td><span className={`badge badge-${l.status.toLowerCase().replace(/ /g,'-')}`}>{l.status}</span></td>
                       </tr>
                     ))}
                     {!leaves.length && <tr><td colSpan={4}><div className="empty-state"><p>No applications yet</p></div></td></tr>}
@@ -175,7 +175,7 @@ export default function StudentDashboard() {
                 <div className="form-group">
                   <label className="form-label">Leave Type</label>
                   <select className="form-control" value={leaveType} onChange={e => setLeaveType(e.target.value)}>
-                    <option value="">Select type…</option>
+                    <option value="">Select type</option>
                     <option value="medical">Medical / Health</option>
                     <option value="personal">Personal</option>
                     <option value="family">Family Emergency</option>
@@ -201,17 +201,7 @@ export default function StudentDashboard() {
               </div>
               <div className="form-group">
                 <label className="form-label">Reason / Description</label>
-                <textarea className="form-control" value={reason} onChange={e => setReason(e.target.value)} placeholder="Briefly explain your reason for leave…" />
-              </div>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label className="form-label">Faculty / Mentor</label>
-                  <input className="form-control" value={user?.faculty || ''} readOnly />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Supporting Document (Optional)</label>
-                  <input className="form-control" type="file" />
-                </div>
+                <textarea className="form-control" value={reason} onChange={e => setReason(e.target.value)} placeholder="Briefly explain your reason for leave" />
               </div>
               <div style={{ display:'flex', gap:'.75rem', marginTop:'.75rem', flexWrap:'wrap' }}>
                 <button className="btn btn-primary" onClick={submitLeave}>Submit Application</button>
@@ -241,10 +231,10 @@ export default function StudentDashboard() {
                     {filteredLeaves.map((l, i) => (
                       <tr key={l.id}>
                         <td className="td-muted">{i+1}</td>
-                        <td style={{ textTransform:'capitalize' }}>{l.type}</td>
-                        <td>{l.from}</td><td>{l.to}</td><td>{l.days}</td>
+                        <td style={{ textTransform:'capitalize' }}>{l.leave_type}</td>
+                        <td>{l.from_date}</td><td>{l.to_date}</td><td>{l.days}</td>
                         <td className="td-clip">{l.reason}</td>
-                        <td><span className={`badge badge-${l.status.toLowerCase()}`}>{l.status}</span></td>
+                        <td><span className={`badge badge-${l.status.toLowerCase().replace(/ /g,'-')}`}>{l.status}</span></td>
                         <td className="td-muted td-clip">{l.remarks}</td>
                       </tr>
                     ))}
@@ -283,16 +273,16 @@ export default function StudentDashboard() {
               </div>
               <div className="card">
                 <div className="card-title" style={{ marginBottom:'1rem' }}><div className="card-icon">—</div>Upcoming Leaves</div>
-                {leaves.filter(l => new Date(l.from+'T00:00:00') >= new Date() && l.status !== 'Rejected').map(l => (
+                {leaves.filter(l => new Date(l.from_date+'T00:00:00') >= new Date() && !l.status.includes('Rejected')).map(l => (
                   <div key={l.id} className="upcoming-item">
                     <div className="upcoming-row">
-                      <span className="upcoming-title">{l.type} Leave</span>
-                      <span className={`badge badge-${l.status.toLowerCase()}`}>{l.status}</span>
+                      <span className="upcoming-title">{l.leave_type} Leave</span>
+                      <span className={`badge badge-${l.status.toLowerCase().replace(/ /g,'-')}`}>{l.status}</span>
                     </div>
-                    <p className="upcoming-meta">{l.from}{l.from!==l.to?' -> '+l.to:''} · {l.days} day{l.days>1?'s':''}</p>
+                    <p className="upcoming-meta">{l.from_date}{l.from_date!==l.to_date?' to '+l.to_date:''} · {l.days} day{l.days>1?'s':''}</p>
                   </div>
                 ))}
-                {!leaves.filter(l => new Date(l.from+'T00:00:00') >= new Date() && l.status !== 'Rejected').length &&
+                {!leaves.filter(l => new Date(l.from_date+'T00:00:00') >= new Date() && !l.status.includes('Rejected')).length &&
                   <div className="empty-state"><p>No upcoming leaves</p></div>}
               </div>
             </div>

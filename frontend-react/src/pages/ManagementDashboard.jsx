@@ -246,9 +246,17 @@ export default function ManagementDashboard() {
                 <div className="card" style={{marginBottom:'1rem'}}>
                   <div className="card-title" style={{marginBottom:'1.25rem'}}><div className="card-icon">—</div>Add Class</div>
                   <div className="form-grid">
-                    <div className="form-group"><label className="form-label">Class Name *</label><input className="form-control" value={newClass.class_name} onChange={e=>setNewClass(c=>({...c,class_name:e.target.value}))} placeholder="CS-A" /></div>
-                    <div className="form-group"><label className="form-label">Department</label><input className="form-control" value={newClass.department} onChange={e=>setNewClass(c=>({...c,department:e.target.value}))} placeholder="Computer Science" /></div>
-                    <div className="form-group"><label className="form-label">Semester</label><input className="form-control" value={newClass.semester} onChange={e=>setNewClass(c=>({...c,semester:e.target.value}))} placeholder="5" /></div>
+                    <div className="form-group"><label className="form-label">Class Name *</label><input className="form-control" value={newClass.class_name} onChange={e=>setNewClass(c=>({...c,class_name:e.target.value}))} placeholder="e.g. BCA-3A" /></div>
+                    <div className="form-group">
+                      <label className="form-label">Department</label>
+                      <select className="form-control" value={newClass.department} onChange={e=>setNewClass(c=>({...c,department:e.target.value}))}>
+                        <option value="">Select department</option>
+                        <option value="Computer Science">Computer Science (BCA)</option>
+                        <option value="Business Administration">Business Administration (BBA)</option>
+                        <option value="Commerce">Commerce (BCom)</option>
+                      </select>
+                    </div>
+                    <div className="form-group"><label className="form-label">Semester</label><input className="form-control" value={newClass.semester} onChange={e=>setNewClass(c=>({...c,semester:e.target.value}))} placeholder="1-6" /></div>
                     <div className="form-group"><label className="form-label">Section</label><input className="form-control" value={newClass.section} onChange={e=>setNewClass(c=>({...c,section:e.target.value}))} placeholder="A" /></div>
                   </div>
                   <button className="btn btn-primary btn-sm" onClick={addClass}>Add Class</button>
@@ -267,10 +275,19 @@ export default function ManagementDashboard() {
               <div>
                 <div className="card" style={{marginBottom:'1rem'}}>
                   <div className="card-title" style={{marginBottom:'1.25rem'}}><div className="card-icon">—</div>Add Subject</div>
-                  <div className="form-group"><label className="form-label">Subject Name *</label><input className="form-control" value={newSubject.subject_name} onChange={e=>setNewSubject(s=>({...s,subject_name:e.target.value}))} placeholder="Data Structures" /></div>
+                  <div className="form-group"><label className="form-label">Subject Name *</label><input className="form-control" value={newSubject.subject_name} onChange={e=>setNewSubject(s=>({...s,subject_name:e.target.value}))} placeholder="e.g. Data Structures" /></div>
                   <div className="form-grid">
-                    <div className="form-group"><label className="form-label">Subject Code</label><input className="form-control" value={newSubject.subject_code} onChange={e=>setNewSubject(s=>({...s,subject_code:e.target.value}))} placeholder="CS301" /></div>
-                    <div className="form-group"><label className="form-label">Department</label><input className="form-control" value={newSubject.department} onChange={e=>setNewSubject(s=>({...s,department:e.target.value}))} placeholder="Computer Science" /></div>
+                    <div className="form-group"><label className="form-label">Subject Code</label><input className="form-control" value={newSubject.subject_code} onChange={e=>setNewSubject(s=>({...s,subject_code:e.target.value}))} placeholder="e.g. BCA301" /></div>
+                    <div className="form-group">
+                      <label className="form-label">Department</label>
+                      <select className="form-control" value={newSubject.department} onChange={e=>setNewSubject(s=>({...s,department:e.target.value}))}>
+                        <option value="">Select department</option>
+                        <option value="Computer Science">Computer Science (BCA)</option>
+                        <option value="Business Administration">Business Administration (BBA)</option>
+                        <option value="Commerce">Commerce (BCom)</option>
+                        <option value="Common">Common (All Departments)</option>
+                      </select>
+                    </div>
                   </div>
                   <button className="btn btn-primary btn-sm" onClick={addSubject}>Add Subject</button>
                 </div>
@@ -349,9 +366,14 @@ export default function ManagementDashboard() {
               <div className="form-grid">
                 <div className="form-group">
                   <label className="form-label">Department <span style={{color:'var(--rejected)'}}>*</span></label>
-                  <input className="form-control" value={newLecturer.department}
-                    onChange={e => setNewLecturer(l => ({...l, department: e.target.value}))}
-                    placeholder="Computer Science" />
+                  <select className="form-control" value={newLecturer.department}
+                    onChange={e => setNewLecturer(l => ({...l, department: e.target.value}))}>
+                    <option value="">Select department</option>
+                    <option value="Computer Science">Computer Science (BCA)</option>
+                    <option value="Business Administration">Business Administration (BBA)</option>
+                    <option value="Commerce">Commerce (BCom)</option>
+                    <option value="Common">Common (All Departments)</option>
+                  </select>
                 </div>
                 <div className="form-group">
                   <label className="form-label">Lecturer ID <span style={{color:'var(--text-3)', fontWeight:400}}>(optional)</span></label>

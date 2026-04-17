@@ -253,17 +253,47 @@ export default function Login() {
               <div className="form-grid">
                 <div className="form-group">
                   <label className="form-label">Department <span style={{color:'var(--rejected)'}}>*</span></label>
-                  <input className="form-control" value={form.department || ''} onChange={e => set('department', e.target.value)} />
+                  <select className="form-control" value={form.department || ''} onChange={e => set('department', e.target.value)}>
+                    <option value="">Select department</option>
+                    <option value="Computer Science">Computer Science (BCA)</option>
+                    <option value="Business Administration">Business Administration (BBA)</option>
+                    <option value="Commerce">Commerce (BCom)</option>
+                  </select>
                 </div>
                 <div className="form-group">
                   <label className="form-label">Class <span style={{color:'var(--rejected)'}}>*</span></label>
-                  <input className="form-control" value={form.class_name || ''} onChange={e => set('class_name', e.target.value)} />
+                  <select className="form-control" value={form.class_name || ''} onChange={e => set('class_name', e.target.value)}>
+                    <option value="">Select class</option>
+                    <optgroup label="BCA — Computer Science">
+                      <option value="BCA-1A">BCA-1A (Semester 1)</option>
+                      <option value="BCA-2A">BCA-2A (Semester 3)</option>
+                      <option value="BCA-3A">BCA-3A (Semester 5)</option>
+                    </optgroup>
+                    <optgroup label="BBA — Business Administration">
+                      <option value="BBA-1A">BBA-1A (Semester 1)</option>
+                      <option value="BBA-2A">BBA-2A (Semester 3)</option>
+                      <option value="BBA-3A">BBA-3A (Semester 5)</option>
+                    </optgroup>
+                    <optgroup label="BCom — Commerce">
+                      <option value="BCom-1A">BCom-1A (Semester 1)</option>
+                      <option value="BCom-2A">BCom-2A (Semester 3)</option>
+                      <option value="BCom-3A">BCom-3A (Semester 5)</option>
+                    </optgroup>
+                  </select>
                 </div>
               </div>
               <div className="form-grid">
                 <div className="form-group">
                   <label className="form-label">Semester</label>
-                  <input className="form-control" value={form.semester || ''} onChange={e => set('semester', e.target.value)} />
+                  <select className="form-control" value={form.semester || ''} onChange={e => set('semester', e.target.value)}>
+                    <option value="">Select semester</option>
+                    <option value="1">Semester 1</option>
+                    <option value="2">Semester 2</option>
+                    <option value="3">Semester 3</option>
+                    <option value="4">Semester 4</option>
+                    <option value="5">Semester 5</option>
+                    <option value="6">Semester 6</option>
+                  </select>
                 </div>
                 <div className="form-group">
                   <label className="form-label">Password <span style={{color:'var(--rejected)'}}>*</span></label>
