@@ -47,7 +47,7 @@ export default function Sidebar({ activePage, onNavigate, badge = 0 }) {
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">
-        <div className="brand-mark">AA</div>
+        <img src="/logo.svg" alt="AbsentAlert" style={{ width: 36, height: 36, flexShrink: 0 }} />
         <div className="brand-text">
           <h2>Absent<span>Alert</span></h2>
           <p>{ROLE_LABEL[role]}</p>

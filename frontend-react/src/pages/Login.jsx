@@ -162,12 +162,13 @@ export default function Login() {
 
         {/* Brand */}
         <div style={S.brand}>
-          <div style={S.logo(activeColor)}>AA</div>
+          <img src="/logo.svg" alt="AbsentAlert Logo"
+            style={{ width: 80, height: 80, margin: '0 auto 0.75rem', display: 'block' }} />
           <h1 style={{ fontFamily:"'Sora',sans-serif", fontSize:'2rem', letterSpacing:'-.5px', color:'var(--text-1)' }}>
-            Absent<span style={{ color: activeColor }}>Alert</span>
+            Absent<span style={{ color: '#1d4ed8' }}>Alert</span>
           </h1>
           <p style={{ color:'var(--text-3)', fontSize:'.875rem', marginTop:'.3rem' }}>
-            Leave Approval Management System
+            Absence Management &amp; Notification System
           </p>
         </div>
 
