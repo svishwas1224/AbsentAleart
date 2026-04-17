@@ -24,7 +24,6 @@ export default function ManagementDashboard() {
   const [students, setStudents]   = useState([])
   const [assignments, setAssignments] = useState([])
   const [lecLeaves, setLecLeaves] = useState([])
-  const [forwarded, setForwarded] = useState([])
   const [allLeaves, setAllLeaves] = useState([])
   const [studentReport, setStudentReport] = useState([])
   const [modal, setModal]         = useState(null)
@@ -38,15 +37,15 @@ export default function ManagementDashboard() {
   const [newLecturer, setNewLecturer] = useState({ lecturer_name:'', email:'', password:'', department:'', lecturer_id:'' })
 
   const load = useCallback(async () => {
-    const [s, c, sub, l, st, a, ll, fw, al, sr] = await Promise.all([
+    const [s, c, sub, l, st, a, ll, al, sr] = await Promise.all([
       api.getDashboard(), api.getClasses(), api.getSubjects(),
       api.getLecturers(), api.getStudents(), api.getAssignments(),
-      api.lecturerRequests(), api.forwardedLeaves(), api.allLeaves(),
+      api.lecturerRequests(), api.allLeaves(),
       api.getStudentReport(),
     ])
     setStats(s); setClasses(c); setSubjects(sub); setLecturers(l)
     setStudents(st); setAssignments(a); setLecLeaves(ll)
-    setForwarded(fw); setAllLeaves(al); setStudentReport(sr)
+    setAllLeaves(al); setStudentReport(sr)
   }, [])
 
   useEffect(() => { load() }, [load])
@@ -151,17 +150,16 @@ export default function ManagementDashboard() {
             </div>
             <div className="stats-grid">
               <div className="stat-card"><div className="stat-icon">ALL</div><div className="stat-value">{stats.total_leaves||0}</div><div className="stat-label">Total Leaves</div></div>
-              <div className="stat-card c-blue"><div className="stat-icon">FWD</div><div className="stat-value">{stats.forwarded||0}</div><div className="stat-label">Forwarded</div></div>
               <div className="stat-card c-yellow"><div className="stat-icon">PND</div><div className="stat-value">{stats.pending_lecturer||0}</div><div className="stat-label">With Lecturer</div></div>
               <div className="stat-card c-red"><div className="stat-icon">REJ</div><div className="stat-value">{stats.rejected||0}</div><div className="stat-label">Rejected</div></div>
             </div>
             <div className="grid-2-1">
               <div className="card">
                 <div className="card-header">
-                  <div className="card-title"><div className="card-icon">—</div>Forwarded / Pending Leaves</div>
-                  <button className="btn btn-ghost btn-sm" onClick={()=>setPage('forwarded')}>View All</button>
+                  <div className="card-title"><div className="card-icon">—</div>Pending Lecturer Leaves</div>
+                  <button className="btn btn-ghost btn-sm" onClick={()=>setPage('lecturer-leaves')}>View All</button>
                 </div>
-                <LeaveTable leaves={[...forwarded, ...lecLeaves.filter(l=>l.status==='Pending with Management')].slice(0,5)} showActions={true} />
+                <LeaveTable leaves={lecLeaves.filter(l=>l.status==='Pending with Management').slice(0,5)} showActions={true} />
               </div>
               <div className="card">
                 <div className="card-title" style={{marginBottom:'1rem'}}><div className="card-icon">—</div>Recent Assignments</div>
@@ -367,14 +365,6 @@ export default function ManagementDashboard() {
           <div className="fade-in">
             <div className="topbar"><div className="topbar-left"><h1>Lecturer Leave Requests</h1><p>Approve or reject lecturer leaves</p></div></div>
             <div className="card"><LeaveTable leaves={lecLeaves} showActions={true} /></div>
-          </div>
-        )}
-
-        {/* ── FORWARDED ── */}
-        {page === 'forwarded' && (
-          <div className="fade-in">
-            <div className="topbar"><div className="topbar-left"><h1>Forwarded Student Leaves</h1><p>Student leaves forwarded by lecturers</p></div></div>
-            <div className="card"><LeaveTable leaves={forwarded} showActions={true} /></div>
           </div>
         )}
 

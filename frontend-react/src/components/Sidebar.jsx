@@ -24,7 +24,6 @@ const NAV = {
     { id:'classes',         label:'Classes & Subjects' },
     { id:'add-lecturer',    label:'Add Lecturer' },
     { id:'lecturer-leaves', label:'Lecturer Leaves', badge:true },
-    { id:'forwarded',       label:'Forwarded Leaves' },
     { id:'all-leaves',      label:'All Leaves' },
     { id:'students',        label:'Students' },
     { id:'lecturers',       label:'Lecturers' },
