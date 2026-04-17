@@ -19,12 +19,10 @@ const NAV = {
   ],
   management: [
     { id:'dashboard',       label:'Dashboard' },
-    { id:'student-report',  label:'Student Leave Report' },
     { id:'assignments',     label:'Lecturer Assignments' },
     { id:'classes',         label:'Classes & Subjects' },
     { id:'add-lecturer',    label:'Add Lecturer' },
     { id:'lecturer-leaves', label:'Lecturer Leaves', badge:true },
-    { id:'all-leaves',      label:'All Leaves' },
     { id:'students',        label:'Students' },
     { id:'lecturers',       label:'Lecturers' },
     { id:'profile',         label:'Profile' },

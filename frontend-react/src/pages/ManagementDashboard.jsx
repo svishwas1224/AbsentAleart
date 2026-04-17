@@ -141,115 +141,34 @@ export default function ManagementDashboard() {
         {/* ── DASHBOARD ── */}
         {page === 'dashboard' && (
           <div className="fade-in">
-            <div className="topbar"><div className="topbar-left"><h1>{greet}, Admin</h1><p>Management overview — AbsentAlert</p></div></div>
-            <div className="stats-grid">
-              <div className="stat-card c-yellow"><div className="stat-icon">PND</div><div className="stat-value">{stats.pending_management||0}</div><div className="stat-label">Pending (Mgmt)</div><div className="stat-sub">need your action</div></div>
-              <div className="stat-card c-teal"><div className="stat-icon">APR</div><div className="stat-value">{stats.approved||0}</div><div className="stat-label">Total Approved</div><div className="stat-sub">all roles</div></div>
-              <div className="stat-card c-blue"><div className="stat-icon">AA</div><div className="stat-value">{stats.total_students||0}</div><div className="stat-label">Students</div><div className="stat-sub">registered</div></div>
-              <div className="stat-card c-red"><div className="stat-icon">LEC</div><div className="stat-value">{stats.total_lecturers||0}</div><div className="stat-label">Lecturers</div><div className="stat-sub">registered</div></div>
-            </div>
-            <div className="stats-grid">
-              <div className="stat-card"><div className="stat-icon">ALL</div><div className="stat-value">{stats.total_leaves||0}</div><div className="stat-label">Total Leaves</div></div>
-              <div className="stat-card c-yellow"><div className="stat-icon">PND</div><div className="stat-value">{stats.pending_lecturer||0}</div><div className="stat-label">With Lecturer</div></div>
-              <div className="stat-card c-red"><div className="stat-icon">REJ</div><div className="stat-value">{stats.rejected||0}</div><div className="stat-label">Rejected</div></div>
-            </div>
-            <div className="grid-2-1">
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title"><div className="card-icon">—</div>Pending Lecturer Leaves</div>
-                  <button className="btn btn-ghost btn-sm" onClick={()=>setPage('lecturer-leaves')}>View All</button>
-                </div>
-                <LeaveTable leaves={lecLeaves.filter(l=>l.status==='Pending with Management').slice(0,5)} showActions={true} />
-              </div>
-              <div className="card">
-                <div className="card-title" style={{marginBottom:'1rem'}}><div className="card-icon">—</div>Recent Assignments</div>
-                {assignments.slice(-6).reverse().map(a => (
-                  <div key={a.id} className="qs-row">
-                    <span className="qs-label" style={{fontSize:'.8rem'}}>{a.lecturer_name}</span>
-                    <span className="qs-val" style={{fontSize:'.75rem',color:'var(--text-3)'}}>{a.class_name} to {a.subject_name}</span>
-                  </div>
-                ))}
-                {!assignments.length && <div className="empty-state"><div className="empty-icon"></div><p>No assignments yet</p></div>}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ── STUDENT LEAVE REPORT ── */}
-        {page === 'student-report' && (
-          <div className="fade-in">
             <div className="topbar">
               <div className="topbar-left">
-                <h1>Student Leave Report</h1>
-                <p>All student leaves that are applied or approved</p>
+                <h1>{greet}, Admin</h1>
+                <p>Management overview — AbsentAlert</p>
               </div>
             </div>
-            <div className="stats-grid">
-              <div className="stat-card c-yellow">
-                <div className="stat-value">{studentReport.filter(l => l.status.includes('Pending')).length}</div>
-                <div className="stat-label">Applied / Pending</div>
-              </div>
-              <div className="stat-card c-teal">
-                <div className="stat-value">{studentReport.filter(l => l.status.includes('Approved')).length}</div>
-                <div className="stat-label">Approved</div>
-              </div>
+
+            {/* Two key stats only */}
+            <div className="stats-grid" style={{ gridTemplateColumns:'1fr 1fr', maxWidth:500 }}>
               <div className="stat-card c-blue">
-                <div className="stat-value">{studentReport.filter(l => l.status.includes('Forwarded')).length}</div>
-                <div className="stat-label">Forwarded</div>
-              </div>
-              <div className="stat-card">
                 <div className="stat-value">{studentReport.length}</div>
-                <div className="stat-label">Total</div>
+                <div className="stat-label">Student Leaves</div>
+                <div className="stat-sub">applied this semester</div>
+              </div>
+              <div className="stat-card c-yellow">
+                <div className="stat-value">{lecLeaves.filter(l=>l.status==='Pending with Management').length}</div>
+                <div className="stat-label">Lecturer Leaves Pending</div>
+                <div className="stat-sub">awaiting your approval</div>
               </div>
             </div>
+
+            {/* Lecturer leaves table */}
             <div className="card">
-              <div className="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Student Name</th>
-                      <th>Class</th>
-                      <th>Department</th>
-                      <th>Leave Type</th>
-                      <th>From</th>
-                      <th>To</th>
-                      <th>Days</th>
-                      <th>Reason</th>
-                      <th>Status</th>
-                      <th>Applied On</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studentReport.map((l, i) => (
-                      <tr key={l.id}>
-                        <td className="td-muted">{i + 1}</td>
-                        <td className="td-primary">{l.applicant_name}</td>
-                        <td>{l.class_name}</td>
-                        <td>{l.department}</td>
-                        <td style={{ textTransform:'capitalize' }}>{l.leave_type}</td>
-                        <td>{l.from_date}</td>
-                        <td>{l.to_date}</td>
-                        <td>{l.days}d</td>
-                        <td className="td-clip">{l.reason}</td>
-                        <td>
-                          <span className={`badge ${
-                            l.status.includes('Approved') ? 'badge-approved' :
-                            l.status.includes('Forwarded') ? 'badge-info' :
-                            'badge-pending'
-                          }`}>{l.status}</span>
-                        </td>
-                        <td className="td-muted">{l.created_at?.slice(0,10)}</td>
-                      </tr>
-                    ))}
-                    {!studentReport.length && (
-                      <tr><td colSpan={11}>
-                        <div className="empty-state"><p>No student leaves found</p></div>
-                      </td></tr>
-                    )}
-                  </tbody>
-                </table>
+              <div className="card-header">
+                <div className="card-title">Lecturer Leave Requests</div>
+                <button className="btn btn-ghost btn-sm" onClick={()=>setPage('lecturer-leaves')}>View All</button>
               </div>
+              <LeaveTable leaves={lecLeaves.filter(l=>l.status==='Pending with Management').slice(0,5)} showActions={true} />
             </div>
           </div>
         )}
@@ -365,14 +284,6 @@ export default function ManagementDashboard() {
           <div className="fade-in">
             <div className="topbar"><div className="topbar-left"><h1>Lecturer Leave Requests</h1><p>Approve or reject lecturer leaves</p></div></div>
             <div className="card"><LeaveTable leaves={lecLeaves} showActions={true} /></div>
-          </div>
-        )}
-
-        {/* ── ALL LEAVES ── */}
-        {page === 'all-leaves' && (
-          <div className="fade-in">
-            <div className="topbar"><div className="topbar-left"><h1>All Leave Records</h1><p>Complete leave history across all roles</p></div></div>
-            <div className="card"><LeaveTable leaves={allLeaves} showActions={false} /></div>
           </div>
         )}
 
